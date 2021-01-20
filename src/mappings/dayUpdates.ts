@@ -1,31 +1,31 @@
 import { PairHourData } from './../types/schema'
 /* eslint-disable prefer-const */
 import { BigInt, BigDecimal, EthereumEvent } from '@graphprotocol/graph-ts'
-import { Pair, Bundle, Token, UniswapFactory, UniswapDayData, PairDayData, TokenDayData } from '../types/schema'
+import { Pair, Bundle, Token, PyladesFactory, PyladesDayData, PairDayData, TokenDayData } from '../types/schema'
 import { ONE_BI, ZERO_BD, ZERO_BI, FACTORY_ADDRESS } from './helpers'
 
-export function updateUniswapDayData(event: EthereumEvent): UniswapDayData {
-  let uniswap = UniswapFactory.load(FACTORY_ADDRESS)
+export function updatePyladesDayData(event: EthereumEvent): PyladesDayData {
+  let pylades = PyladesFactory.load(FACTORY_ADDRESS)
   let timestamp = event.block.timestamp.toI32()
   let dayID = timestamp / 86400
   let dayStartTimestamp = dayID * 86400
-  let uniswapDayData = UniswapDayData.load(dayID.toString())
-  if (uniswapDayData === null) {
-    uniswapDayData = new UniswapDayData(dayID.toString())
-    uniswapDayData.date = dayStartTimestamp
-    uniswapDayData.dailyVolumeUSD = ZERO_BD
-    uniswapDayData.dailyVolumeETH = ZERO_BD
-    uniswapDayData.totalVolumeUSD = ZERO_BD
-    uniswapDayData.totalVolumeETH = ZERO_BD
-    uniswapDayData.dailyVolumeUntracked = ZERO_BD
+  let pyladesDayData = PyladesDayData.load(dayID.toString())
+  if (pyladesDayData === null) {
+    pyladesDayData = new PyladesDayData(dayID.toString())
+    pyladesDayData.date = dayStartTimestamp
+    pyladesDayData.dailyVolumeUSD = ZERO_BD
+    pyladesDayData.dailyVolumeETH = ZERO_BD
+    pyladesDayData.totalVolumeUSD = ZERO_BD
+    pyladesDayData.totalVolumeETH = ZERO_BD
+    pyladesDayData.dailyVolumeUntracked = ZERO_BD
   }
 
-  uniswapDayData.totalLiquidityUSD = uniswap.totalLiquidityUSD
-  uniswapDayData.totalLiquidityETH = uniswap.totalLiquidityETH
-  uniswapDayData.txCount = uniswap.txCount
-  uniswapDayData.save()
+  pyladesDayData.totalLiquidityUSD = pylades.totalLiquidityUSD
+  pyladesDayData.totalLiquidityETH = pylades.totalLiquidityETH
+  pyladesDayData.txCount = pylades.txCount
+  pyladesDayData.save()
 
-  return uniswapDayData as UniswapDayData
+  return pyladesDayData as PyladesDayData
 }
 
 export function updatePairDayData(event: EthereumEvent): PairDayData {
